@@ -1,0 +1,102 @@
+{% extends 'AdminPanel/base.html' %}
+
+{% block content %}
+<div class="main-content">
+    <!-- main-content-wrap -->
+    <div class="main-content-inner">
+        <!-- main-content-wrap -->
+        <div class="main-content-wrap">
+            <div class="flex items-center flex-wrap justify-between gap20 mb-30">
+                <h3>All category</h3>
+                <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
+                    <li>
+                        <a href="{% url 'adminHome' %}"><div class="text-tiny">Dashboard</div></a>
+                    </li>
+                    <li>
+                        <i class="icon-chevron-right"></i>
+                    </li>
+                    <li>
+                        <a href="#" role="button"><div class="text-tiny">Category</div></a>
+                    </li>
+                    <li>
+                        <i class="icon-chevron-right"></i>
+                    </li>
+                    <li>
+                        <div class="text-tiny">All category</div>
+                    </li>
+                </ul>
+            </div>
+
+            {% if messages %}
+            <div class="alert-box">
+                {% for message in messages %}
+                <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">
+                    <span>{{ message }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- all-category -->
+            <div class="wg-box">
+                <div class="flex items-center justify-between gap10 flex-wrap">
+                    <div class="wg-filter flex-grow">
+                        <form class="form-search" action="{% url 'categoryList' %}" method="get">
+                            <fieldset class="name">
+                                <input type="text" placeholder="Search here..." class="" name="name" tabindex="2" value="{{ search_query }}" aria-required="true">
+                            </fieldset>
+                            <div class="button-submit">
+                                <button class="" type="submit"><i class="icon-search"></i></button>
+                            </div>
+                        </form>
+                    </div> <!-- Close wg-filter -->
+
+                    <a class="tf-button style-1 w208" href="{% url 'newCategory' %}"><i class="icon-plus"></i>Add new</a>
+                </div> <!-- Close flex items-center -->
+
+                <div class="wg-table table-all-category">
+                    <ul class="table-title flex gap20 mb-14">
+                        <li><div class="body-title">Category</div></li>
+                        <li><div class="body-title">Quantity</div></li>
+                        <li><div class="body-title">Start Date</div></li>
+                        <li><div class="body-title">Action</div></li>
+                    </ul>
+
+                     <ul class="flex flex-column">
+                        {% for category in categores %}
+                        <li class="wg-product item-row gap20">
+                            <div class="name">
+                                  
+                                       
+                                <div class="title line-clamp-2 mb-0">
+                                    <a href="#" class="body-text">{{ category.title }}</a>
+                                </div>
+                            </div>
+                            <div class="body-text text-main-dark mt-4">{{ category.quantity }}</div>
+                            <div class="body-text text-main-dark mt-4">{{ category.createdDate }}</div>
+                            <div class="list-icon-function">
+                                <div class="item edit">
+                                    <a href="">
+                                        <i class="icon-edit-3"></i>
+                                    </a>
+
+                                </div>
+                                <div class="item trash">
+                                    <a href="{% url 'deleteCategory' category.id %}"><i class="icon-trash-2"></i></a>
+                                </div>
+                                
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div> <!-- Close wg-table -->
+
+                <div class="divider"></div>
+            </div> <!-- Close wg-box -->
+            <!-- /all-category -->
+        </div>
+        <!-- /main-content-wrap -->
+    </div>
+    <!-- /main-content-wrap -->
+</div>
+{% endblock %}

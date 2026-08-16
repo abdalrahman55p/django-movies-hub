@@ -1,0 +1,12 @@
+
+{% load static %}
+<div class="quick-view-container">
+    <div class="product-image">
+        <img src="{{ product.img.url }}" alt="{{ product.title }}" class="img-fluid">
+    </div>
+    <div class="product-details">
+        <h3>{{ product.title }}</h3>
+        <p>{{ product.description }}</p>
+        <strong>Price: ${{ product.price }}</strong>
+    </div>
+</div>

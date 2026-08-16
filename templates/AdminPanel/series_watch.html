@@ -1,0 +1,21 @@
+{% extends 'AdminPanel/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5 text-center">
+  <h2 class="fw-bold mb-4">{{ series.title }}</h2>
+
+  {% if series.video %}
+    <video controls width="80%" class="rounded shadow">
+      <source src="{{ series.video.url }}" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  {% else %}
+    <p class="text-muted">🎥 No video available for this series.</p>
+  {% endif %}
+
+  <div class="mt-4">
+    <a href="{% url 'series_detail' series.id %}" class="btn btn-outline-secondary">⬅ Back</a>
+  </div>
+</div>
+{% endblock %}

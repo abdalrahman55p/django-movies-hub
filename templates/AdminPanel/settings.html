@@ -1,0 +1,147 @@
+{% extends 'AdminPanel/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="settings-container">
+  <h2 class="page-title">⚙️ إعدادات الموقع</h2>
+
+  <form method="post" enctype="multipart/form-data" class="settings-form">
+    {% csrf_token %}
+    
+    
+
+
+    <div class="form-group">
+      <label>📛 اسم الموقع</label>
+      <input type="text" name="site_name" value="{{ settings.site_name }}" placeholder="اسم الموقع..." required>
+    </div>
+
+    <div class="form-group">
+      <label>🌐 رابط الموقع</label>
+      <input type="url" name="site_url" value="{{ settings.site_url }}" placeholder="https://example.com">
+    </div>
+
+    <div class="form-group">
+      <label>📧 البريد الإلكتروني للتواصل</label>
+      <input type="email" name="contact_email" value="{{ settings.contact_email }}" placeholder="example@mail.com">
+    </div>
+
+    <div class="form-group">
+      <label>📱 رقم الهاتف</label>
+      <input type="text" name="phone" value="{{ settings.phone }}" placeholder="+20 10xxxxxxxx">
+    </div>
+
+    <div class="form-group">
+      <label>🖼 شعار الموقع</label>
+      {% if settings.logo %}
+        <img src="{{ settings.logo.url }}" alt="Logo" class="preview-logo">
+      {% endif %}
+      <input type="file" name="logo">
+    </div>
+
+    <div class="form-group">
+      <label>🎨 الوضع الداكن</label>
+      <select name="dark_mode">
+        <option value="on" {% if settings.dark_mode == 'on' %}selected{% endif %}>تشغيل</option>
+        <option value="off" {% if settings.dark_mode == 'off' %}selected{% endif %}>إيقاف</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>📝 وصف الموقع</label>
+      <textarea name="site_description" rows="4" placeholder="نبذة قصيرة عن الموقع...">{{ settings.site_description }}</textarea>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="save-btn">💾 حفظ التغييرات</button>
+      <button type="reset" class="reset-btn">↩️ إعادة تعيين</button>
+    </div>
+  </form>
+</div>
+
+<style>
+  .settings-container {
+    background: #111;
+    color: #fff;
+    padding: 40px;
+    min-height: 100vh;
+  }
+
+  .page-title {
+    color: #e50914;
+    border-bottom: 2px solid #e50914;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+  }
+
+  .settings-form {
+    max-width: 700px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .form-group label {
+    font-weight: bold;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background: #222;
+    color: #fff;
+    font-size: 1rem;
+  }
+
+  .preview-logo {
+    width: 100px;
+    height: auto;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #333;
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+
+  .save-btn, .reset-btn {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .save-btn {
+    background: #e50914;
+    color: #fff;
+  }
+
+  .reset-btn {
+    background: #444;
+    color: #fff;
+  }
+
+  .save-btn:hover {
+    background: #f6121d;
+  }
+
+  .reset-btn:hover {
+    background: #555;
+  }
+</style>
+
+{% endblock %}

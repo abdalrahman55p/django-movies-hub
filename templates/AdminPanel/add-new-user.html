@@ -1,0 +1,149 @@
+{% extends 'AdminPanel/base.html' %}
+
+{% block profile %}
+<span class="flex flex-column">
+    <span class="body-text text-main-dark">{{user.first_name}}</span>
+    <span class="text-tiny">{{user.job_title}}</span>
+</span>
+{% endblock profile %}
+
+
+{% block content %}
+<div class="main-content">
+    <div class="main-content-inner">
+        <div class="main-content-wrap">
+            <div class="flex items-center flex-wrap justify-between gap20 mb-30">
+                <h3>Add New User</h3>
+                <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
+                    <li>
+                        <a href="{% url 'adminHome' %}"><div class="text-tiny">Dashboard</div></a>
+                    </li>
+                    <li><i class="icon-chevron-right"></i></li>
+                    <li>
+                        <a href="#" role="button"><div class="text-tiny">User</div></a>
+                    </li>
+                    <li><i class="icon-chevron-right"></i></li>
+                    <li>
+                        <div class="text-tiny">Add New User</div>
+                    </li>
+                </ul>
+            </div>
+
+            {% if messages %}
+            <div class="alert-box">
+                {% for message in messages %}
+                <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">
+                    <span>{{ message }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if form.errors %}
+                <div class="error-messages">
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            <div class="alert alert-danger">
+                                {{ field|title }}: {{ error }}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form class="form-add-new-user form-style-2" method="post" action="{% url 'addUser' %}">
+                {% csrf_token %}
+                <div class="wg-box">
+                    <div class="left">
+                        <h5 class="mb-4">Account</h5>
+                        <div class="body-text">Fill in the information below to add a new account</div>
+                    </div>
+                    <div class="right flex-grow">
+                        <fieldset class="name mb-24">
+                            <div class="body-title mb-10">Name</div>
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}
+                                <div class="error-text">{{ form.first_name.errors.as_text }}</div>
+                            {% endif %}
+                        </fieldset>
+
+                        <fieldset class="email mb-24">
+                            <div class="body-title mb-10">Username</div>
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                                <div class="error-text">{{ form.username.errors.as_text }}</div>
+                            {% endif %}
+                        </fieldset>
+
+                        <fieldset class="email mb-24">
+                            <div class="body-title mb-10">Job title</div>
+                            {{ form.job_title }}
+                            {% if form.job_title.errors %}
+                                <div class="error-text">{{ form.job_title.errors.as_text }}</div>
+                            {% endif %}
+                        </fieldset>
+
+                        <fieldset class="password mb-24">
+                            <div class="body-title mb-10">Password</div>
+                            {{ form.password }}
+                            {% if form.password.errors %}
+                                <div class="error-text">{{ form.password.errors.as_text }}</div>
+                            {% endif %}
+                            <span class="show-pass">
+                                <i class="icon-eye view"></i>
+                                <i class="icon-eye-off hide"></i>
+                            </span>
+                        </fieldset>
+                        
+                        <fieldset class="password">
+                            <div class="body-title mb-10">Confirm password</div>
+                            {{ form.confirm_password }}
+                            {% if form.confirm_password.errors %}
+                                <div class="error-text">{{ form.confirm_password.errors.as_text }}</div>
+                            {% endif %}
+                            <span class="show-pass">
+                                <i class="icon-eye view"></i>
+                                <i class="icon-eye-off hide"></i>
+                            </span>
+                        </fieldset>
+                    </div>
+                </div>
+
+                <div class="wg-box">
+                    <div class="left">
+                        <h5 class="mb-4">Permission</h5>
+                        <div class="body-text">Items that the account is allowed to edit</div>
+                    </div>
+
+                    <div class="right flex-grow">
+                        {% for field in form.visible_fields %}
+                            {% if field.name != 'password' and field.name != 'confirm_password' and field.name != 'first_name' and field.name != 'job_title' and field.name != 'username'   %}
+                                <fieldset class="mb-24">
+                                    <div class="body-title mb-10">{{ field.label }}</div>
+                                    <div class="radio-buttons">
+                                        {% for choice in field.field.choices %}
+                                            <div class="item">
+                                                <input class="" type="radio" name="{{ field.html_name }}" id="{{ field.html_name }}{{ forloop.counter }}" value="{{ choice.0 }}" {% if field.value == choice.0 %}checked{% endif %}>
+                                                <label class="" for="{{ field.html_name }}{{ forloop.counter }}">
+                                                    <span class="body-title-2">{{ choice.1 }}</span>
+                                                </label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </fieldset>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="bot">
+                    <button class="tf-button w180" type="submit">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock content %}

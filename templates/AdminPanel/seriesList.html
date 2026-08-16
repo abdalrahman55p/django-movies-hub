@@ -1,0 +1,10 @@
+{% extends "AdminPanel/base.html" %}
+
+{% block content %}
+<h1>قائمة المسلسلات</h1>
+<ul>
+    {% for s in series_list %}
+        <li>{{ s.title }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}

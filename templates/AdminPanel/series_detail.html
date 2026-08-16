@@ -1,0 +1,70 @@
+{% extends 'AdminPanel/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5 text-white">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card bg-dark border-danger shadow-lg p-4">
+
+        <!-- العنوان -->
+        <h2 class="text-center text-danger fw-bold mb-4">{{ series.title }}</h2>
+
+        <!-- الصورة -->
+        <div class="text-center mb-4">
+          {% if series.seriesPoster %}
+            <img src="{{ series.seriesPoster.url }}" 
+                 alt="{{ series.title }}" 
+                 class="img-fluid rounded shadow" 
+                 style="max-height: 400px; object-fit: cover;">
+          {% else %}
+            <img src="{% static 'images/default-poster.jpg' %}" 
+                 alt="No image" 
+                 class="img-fluid rounded shadow" 
+                 style="max-height: 400px; object-fit: cover;">
+          {% endif %}
+        </div>
+
+        <!-- الفيديو -->
+        <div class="text-center mb-4">
+          {% if series.seriesVideo %}
+            <video controls width="100%" class="rounded shadow">
+              <source src="{{ series.seriesVideo.url }}" type="video/mp4">
+              متصفحك لا يدعم عرض الفيديو 🎥
+            </video>
+          {% else %}
+            <p class="text-center text-muted">🎥 No video available for this series.</p>
+          {% endif %}
+        </div>
+
+        <!-- الوصف -->
+        <fieldset class="name">
+          <div class="body-title text-danger">Description</div>
+          <textarea class="form-control text-danger" rows="17" disabled>{{ series.description }}</textarea>
+        </fieldset>
+
+        <!-- التاريخ -->
+        <p class="text-center mt-3" style="color: red; font-weight: bold;">
+          📅 تاريخ الإضافة: {{ series.createdDate|date:"Y-m-d" }}
+        </p>
+
+        <!-- الأزرار -->
+        <div class="text-center mt-4">
+          <a href="{% url 'series' %}" class="btn btn-danger px-4">رجوع</a>
+
+          {% if request.user.is_staff or request.user.is_superuser %}
+          <form action="{% url 'deleteSeries' series.id %}" method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger px-4 ms-2"
+                    onclick="return confirm('هل أنت متأكد أنك تريد حذف هذا المسلسل؟ 🗑️')">
+              حذف المسلسل
+            </button>
+          </form>
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

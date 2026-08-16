@@ -1,0 +1,92 @@
+.tf-button {
+    width: max-content;
+    height: 50px;
+    padding: 15px 22px;
+    color: #FFF;
+    @include flex(center,center);
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 20px;
+    border: 1px solid var(--Secondary);
+    border-radius: 12px;
+    background-color: var(--Secondary);
+    background-size: 100%;
+    overflow: hidden;
+    @include transition3();
+    span {
+        @include transition3;
+    }
+    &:hover {
+        color: var(--Secondary);    
+        background-color: #FFF;
+        span {
+            color: #FFF !important;
+        }
+    }
+    i {
+        font-size: 20px;
+    }
+    &.style-1 {
+        color: var(--Secondary);    
+        background-color: var(--White);
+        &:hover {
+            color: #FFF;    
+            background-color: var(--Secondary);
+        }
+    }
+    &.style-2 {
+        color: #FFF;    
+        background-color: transparent;
+        border: 1px solid #FFFFFF4D;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 19px;
+        &:hover {
+            color: #FFF;    
+            background-color: var(--Secondary);
+            border-color: var(--Secondary);
+        }
+    }
+    &.style-3 {
+        color: var(--Secondary);    
+        background-color: transparent;
+        border-color: var(--Secondary);
+        &:hover {
+            color: #FFF;    
+            background-color: var(--Secondary);
+        }
+    }
+    &.style-4 {
+        background-color: var(--White);
+        border: 0;
+        color: var(--Main-Dark);
+        &:hover {
+            background-color: var(--Secondary);
+        }
+    }
+    &.w208 {
+        width: 208px;
+    }
+    &.w230 {
+        width: 230px;
+    }
+    &.w180 {
+        width: 180px;
+    }
+    &.w128 {
+        width: 128px;
+    }
+    &.w380 {
+        width: 380px;
+    }
+}
+
+.tf-button-arrow {
+    .text-tiny.text {
+        color: var(--Secondary) !important;
+    }
+    svg path {
+        fill: var(--Secondary);
+    }
+}

@@ -1,0 +1,132 @@
+{% extends 'AdminPanel/base.html' %}
+{% block profile %}
+<span class="flex flex-column">
+    <span class="body-text text-main-dark">{{user.first_name}}</span>
+    <span class="text-tiny">{{user.job_title}}</span>
+</span>
+{% endblock profile %}
+
+{% block content %}
+<div class="main-content">
+    <div class="main-content-inner">
+        <div class="main-content-wrap">
+            <!-- Page Header -->
+            <div class="flex items-center flex-wrap justify-between gap20 mb-30">
+                <h3>All Products</h3>
+                <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
+                    <li><a href="{% url 'adminHome' %}"><div class="text-tiny">Dashboard</div></a></li>
+                    <li><i class="icon-chevron-right"></i></li>
+                    <li><a href="#"><div class="text-tiny">Product</div></a></li>
+                    <li><i class="icon-chevron-right"></i></li>
+                    <li><div class="text-tiny">All Products</div></li>
+                </ul>
+            </div>
+
+            {% if messages %}
+            <div class="alert-box">
+                {% for message in messages %}
+                <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">
+                    <span>{{ message }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Search and Add Product -->
+            <div class="wg-box">
+                <div class="title-box">
+                    <i class="icon-coffee"></i>
+                    <div class="body-text">Tip: Search by Product Title</div>
+                </div>
+                <div class="flex items-center justify-between gap10 flex-wrap">
+                    <!-- Search Form -->
+                    <div class="wg-filter flex-grow">
+                        <form class="form-search" method="GET" action="{% url 'productList' %}">
+                            <fieldset class="name">
+                                <input 
+                                    type="text" 
+                                    placeholder="{% if query %}{{ query }}{% else %}Search by product title...{% endif %}" 
+                                    name="q" 
+                                   
+                                >
+                            </fieldset>
+                            <div class="button-submit">
+                                <button type="submit"><i class="icon-search"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Add Product Button -->
+                    <a class="tf-button style-1 w208" href="{% url 'addProduct' %}"><i class="icon-plus"></i>Add new</a>
+                </div>
+
+                <!-- Product List Table -->
+                <div class="wg-table table-product-list">
+                    <ul class="table-title flex gap20 mb-14">
+                        <li><div class="body-title">Product</div></li>
+                        <li><div class="body-title">Price</div></li>
+                        <li><div class="body-title">Quantity</div></li>
+                        <li><div class="body-title">Stock</div></li>
+                        <li><div class="body-title">Action</div></li>
+                    </ul>
+                    <ul class="flex flex-column">
+                        {% for product in page.object_list %}
+                        <li class="wg-product item-row gap20">
+                            <div class="name">
+                                <div class="image">
+                                    <img src="{{ product.img.url }}" alt="{{ product.title }}">
+                                </div>
+                                <div class="title line-clamp-2 mb-0">
+                                    <a href="#" class="body-text">{{ product.title }}</a>
+                                </div>
+                            </div>
+                            <div class="body-text text-main-dark mt-4">${{ product.price }}</div>
+                            <div class="body-text text-main-dark mt-4">{{ product.quantity }}</div>
+                            <div>
+                                {% if product.quantity > 0 %}
+                                    <div class="block-available bg-1 fw-7">In Stock</div>
+                                {% else %}
+                                    <div class="block-stock bg-1 fw-7">Out of Stock</div>
+                                {% endif %}
+                            </div>
+                            <div class="list-icon-function">
+                                <div class="item edit">
+                                    <a href="{% url 'editProduct' product.id %}">
+                                        <i class="icon-edit"></i>
+                                    </a>
+                                </div>
+                                <div class="item trash">
+                                    <a href="{% url 'productDelete' product.id %}"><i class="icon-trash-2"></i></a>
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <!-- Pagination -->
+                <div class="divider"></div>
+                <div class="flex items-center justify-between flex-wrap gap10">
+                    <div class="text-tiny">Showing {{ page.start_index }} to {{ page.end_index }} of {{ page.paginator.count }} entries</div>
+                    <ul class="wg-pagination">
+                        {% if page.has_previous %}
+                            <li>
+                                <a href="?page=1&q={{ query }}"><i class="icon-chevron-left"></i></a>
+                            </li>
+                        {% endif %}
+                        {% for num in page.paginator.page_range %}
+                            <li {% if page.number == num %}class="active"{% endif %}>
+                                <a href="?page={{ num }}&q={{ query }}">{{ num }}</a>
+                            </li>
+                        {% endfor %}
+                        {% if page.has_next %}
+                            <li>
+                                <a href="?page={{ page.paginator.num_pages }}&q={{ query }}"><i class="icon-chevron-right"></i></a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

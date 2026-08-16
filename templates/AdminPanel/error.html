@@ -1,0 +1,7 @@
+{% extends 'AdminPanel/base.html' %}
+{% block content %}
+<div class="text-center mt-5 text-white">
+  <h2 style="color:#ff4d4d;">{{ message }}</h2>
+  <a href="{% url 'series' %}" class="btn btn-danger mt-4">رجوع</a>
+</div>
+{% endblock %}

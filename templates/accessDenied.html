@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Denied</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'accessDenied.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>403 - Access Denied</h1>
+        <p>عذرًا، ليس لديك الصلاحية للوصول إلى هذه الصفحة.</p>
+        <a href="{% url 'login' %}" class="btn">الرجوع للصفحة الرئيسية</a>
+    </div>
+</body>
+</html>

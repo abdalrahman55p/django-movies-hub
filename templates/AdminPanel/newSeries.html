@@ -1,0 +1,87 @@
+{% extends 'AdminPanel/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  body {
+    background-color: #0b0b0b;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .upload-container {
+    max-width: 500px;
+    margin: 40px auto;
+    background: #141414;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.25);
+  }
+
+  h2 {
+    color: #e50914;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+  }
+
+  label {
+    color: #ddd;
+    font-size: 13px;
+    margin-top: 8px;
+    display: block;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    background-color: #1f1f1f;
+    border: 1px solid #333;
+    color: #fff;
+    padding: 7px 9px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    font-size: 0.85rem;
+    transition: border 0.3s ease;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: #e50914;
+    outline: none;
+  }
+
+  .btn-upload {
+    background: #e50914;
+    border: none;
+    color: #fff;
+    font-size: 0.9rem;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+
+  .btn-upload:hover {
+    background: #f40612;
+    transform: scale(1.03);
+  }
+
+  .btn-upload:active {
+    transform: scale(0.97);
+  }
+
+  .netflix-glow {
+    box-shadow: 0 0 8px rgba(229, 9, 20, 0.4);
+  }
+</style>
+
+<div class="upload-container netflix-glow">
+  <h2>📺 Add New Series</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ series_form.as_p }}
+    <button type="submit" class="btn-upload">Upload Series</button>
+  </form>
+</div>
+{% endblock %}

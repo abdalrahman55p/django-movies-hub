@@ -1,0 +1,66 @@
+{% extends 'AdminPanel/base.html' %}
+{% block profile %}
+<span class="flex flex-column">
+    <span class="body-text text-main-dark">{{ user.first_name }}</span>
+    <span class="text-tiny">{{ user.job_title }}</span>
+</span>
+{% endblock profile %}
+{% block content %}
+<div class="main-content">
+    <div class="main-content-inner">
+        <div class="main-content-wrap">
+            <div class="flex items-center flex-wrap justify-between gap20 mb-30">
+                <h3>Category information</h3>
+                <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
+                    <li>
+                        <a href="{% url 'adminHome' %}">
+                            <div class="text-tiny">Dashboard</div>
+                        </a>
+                    </li>
+                    <li>
+                        <i class="icon-chevron-right"></i>
+                    </li>
+                    <li>
+                        <a href="#" role="button">
+                            <div class="text-tiny">Category</div>
+                        </a>
+                    </li>
+                    <li>
+                        <i class="icon-chevron-right"></i>
+                    </li>
+                    <li>
+                        <div class="text-tiny">New Category</div>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Error messages -->
+            {% if messages %}
+            <div class="alert-box">
+                {% for message in messages %}
+                <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">
+                    <span>{{ message }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <!-- new-category -->
+            <div class="wg-box">
+                <form class="form-new-product form-style-1" method="post" action="{% url 'newCategory' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <fieldset class="name">
+                        <div class="body-title">Category name <span class="tf-color-1">*</span></div>
+                        {{ form.title }}
+                    </fieldset>
+                    <div class="bot">
+                        <div></div>
+                        <button class="tf-button w208" type="submit">Save</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /new-category -->
+        </div>
+    </div>
+</div>
+{% endblock content %}
