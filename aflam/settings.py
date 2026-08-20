@@ -46,13 +46,7 @@ SECRET_KEY = 'django-insecure-cviwbn-8ry%sjajs&_18&-#y3(l)u4b^==)&vn2hx4!+n@w!8#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-   ".ngrok-free.app",
-    'localhost:8080',
-    '*',
-]
+ALLOWED_HOSTS = ['AbdalrahmanIbrahim.pythonanywhere.com', 'localhost', '127.0.0.1', '*']
 
 
 
@@ -66,16 +60,16 @@ CSRF_TRUSTED_ORIGINS = [
 # Application definition
 
 INSTALLED_APPS = [
-    
+
     'crispy_forms',
     'crispy_bootstrap5',
 
     'colorfield',
-    'admin_interface', 
+    'admin_interface',
 
 
-    'django.contrib.admin',        
-    'django.contrib.auth',           
+    'django.contrib.admin',
+    'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -96,7 +90,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'allauth.account.middleware.AccountMiddleware', 
+    'allauth.account.middleware.AccountMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -104,7 +98,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'aflam.middleware.auto_login.AutoLoginMiddleware',  
+    'aflam.middleware.auto_login.AutoLoginMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
@@ -186,21 +180,21 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',  
-    'allauth.account.auth_backends.AuthenticationBackend', 
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
     'aflam.auth_backends.CustomAuthBackend',
 
 ]
 
 ACCOUNT_LOGIN_METHODS = {"email", "username"}
 ACCOUNT_SIGNUP_FIELDS = ["email*", "username*", "password1*", "password2*"]
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"   
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 LOGIN_REDIRECT_URL = 'adminHome'
 LOGOUT_REDIRECT_URL = 'home'
 
 
 
-SESSION_COOKIE_AGE = 60 * 60 * 24 * 30    
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 30
 SESSION_SAVE_EVERY_REQUEST = True
 
 
@@ -223,14 +217,4 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 
 
-ALLOWED_HOSTS = [
-    'localhost',                 
-    '127.0.0.1',                
-    '192.168.1.4',                  
- 
-    '.trycloudflare.com',           
-    'founder-hughes-housing-duration.trycloudflare.com',
-     'aflam.local',    
-
-         "0.0.0.0",
-]
+ALLOWED_HOSTS = ['*']
