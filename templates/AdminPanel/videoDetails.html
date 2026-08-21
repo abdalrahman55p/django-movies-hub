@@ -3,113 +3,60 @@
 
 {% block content %}
 <style>
-    .video-card-container {
-        background: #ffffff;
-        border-radius: 12px;
-        padding: 25px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    .details-container {
+        padding: 30px;
+        background-color: #111;
+        color: #fff;
+        min-height: 100vh;
     }
-    .video-wrapper {
-        position: relative;
+    .video-box {
+        max-width: 800px;
+        margin: 0 auto 20px auto;
         background: #000;
         border-radius: 10px;
         overflow: hidden;
+    }
+    .info-card {
         max-width: 800px;
-        margin: 0 auto 25px auto;
-    }
-    .poster-preview {
-        max-width: 180px;
+        margin: 0 auto;
+        background: #222;
+        padding: 20px;
         border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
-    .info-label {
-        font-weight: 600;
-        color: #555;
-        margin-bottom: 6px;
-    }
-    .info-box {
-        background: #f8f9fa;
-        border: 1px solid #e9ecef;
-        border-radius: 8px;
-        padding: 10px 15px;
-        color: #333;
-        font-size: 15px;
+    .badge-custom {
+        background: #e50914;
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 0.85rem;
     }
 </style>
 
-<div class="main-content">
-    <div class="main-content-inner">
-        <div class="main-content-wrap">
-            
-            <div class="flex items-center flex-wrap justify-between gap20 mb-30">
-                <h3>Video Details</h3>
-                <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
-                    <li><a href="{% url 'adminHome' %}"><div class="text-tiny">Dashboard</div></a></li>
-                    <li><i class="icon-chevron-right"></i></li>
-                    <li><a href="{% url 'videosList' %}"><div class="text-tiny">Videos</div></a></li>
-                    <li><i class="icon-chevron-right"></i></li>
-                    <li><div class="text-tiny">{{ video.title }}</div></li>
-                </ul>
-            </div>
+<div class="details-container">
+    <div class="mb-4">
+        <a href="{% url 'videosList' %}" style="color: #999; text-decoration: none;">← Back to Videos</a>
+    </div>
 
-            <div class="video-card-container">
-                
-                <!-- مشغل الفيديو أو التريلر -->
-                <div class="video-wrapper mb-4">
-                    {% if video.video %}
-                        <!-- 1. لو في ملف فيديو مرفوع -->
-                        <div class="ratio ratio-16x9">
-                            <video controls poster="{% if video.poster %}{{ video.poster.url }}{% endif %}" style="width:100%; max-height:450px;">
-                                <source src="{{ video.video.url }}" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-                        </div>
-                    {% elif embed_url %}
-                        <!-- 2. لو في رابط يوتيوب/تريلر (يتم قراءته من embed_url اللي جاي من views.py) -->
-                        <div class="ratio ratio-16x9">
-                            <iframe src="{{ embed_url }}" title="{{ video.title }}" allowfullscreen style="border:0; width:100%; height:450px;"></iframe>
-                        </div>
-                    {% else %}
-                        <div class="p-4 text-center text-white">🎥 No video file or trailer available.</div>
-                    {% endif %}
-                </div>
+    <div class="video-box">
+        {% if video.video %}
+            <video controls style="width:100%; max-height:450px;">
+                <source src="{{ video.video.url }}" type="video/mp4">
+            </video>
+        {% elif embed_url %}
+            <iframe src="{{ embed_url }}" style="width:100%; height:450px; border:0;" allowfullscreen></iframe>
+        {% else %}
+            <div style="padding: 50px; text-center; color: #888;">No video file or valid URL stream available.</div>
+        {% endif %}
+    </div>
 
-                <!-- تفاصيل الفيديو -->
-                <div class="row g-4">
-                    {% if video.poster %}
-                        <div class="col-md-3 text-center">
-                            <div class="info-label">Poster</div>
-                            <img src="{{ video.poster.url }}" alt="{{ video.title }}" class="poster-preview img-fluid">
-                        </div>
-                    {% endif %}
-
-                    <div class="{% if video.poster %}col-md-9{% else %}col-md-12{% endif %}">
-                        <div class="mb-3">
-                            <div class="info-label">Title</div>
-                            <div class="info-box">{{ video.title }}</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="info-label">Description</div>
-                            <div class="info-box">{{ video.description|default:"No description provided." }}</div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <div class="info-label">Category</div>
-                                <div class="info-box">{{ video.itemCategory|default:"Uncategorized" }}</div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <div class="info-label">Type</div>
-                                <div class="info-box">{{ video.itemType|default:"N/A" }}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+    <div class="info-card">
+        <h2>{{ video.title }}</h2>
+        <p style="color: #aaa; margin-top: 10px;">{{ video.description|default:"No description provided." }}</p>
+        
+        <div style="margin-top: 20px; display: flex; gap: 10px;">
+            <span class="badge-custom">Category: {{ video.itemCategory|default:"None" }}</span>
+            <span class="badge-custom" style="background:#444;">Type: {{ video.itemType|default:"None" }}</span>
         </div>
     </div>
 </div>
-
-{% endblock content %}
+{% endblock %}
