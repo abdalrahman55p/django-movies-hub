@@ -12,7 +12,7 @@ class VideoTypeForm(forms.ModelForm):
     class Meta:
         model = VideoType
         fields = '__all__'
-        
+
 class SeriesForm(forms.ModelForm):
     class Meta:
         model = Series
@@ -32,20 +32,24 @@ class SeriesForm(forms.ModelForm):
             'trailer_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://...'}),
         }
 
-class VideoItemForm(forms.ModelForm):
-    class Meta:
-        model = VideoItem
-        fields = ['title', 'description', 'video', 'trailer_url', 'poster', 'itemCategory', 'itemType', 'series']
-        labels = {
-            'title': 'Video Title',
-            'description': 'Description',
-            'video': 'Upload Video File',
-            'trailer_url': 'APK / Trailer Link',
-            'poster': 'Upload Poster',
-            'itemCategory': 'Category',
-            'itemType': 'Video Type',
-            'series': 'Series',
-        }
+class VideoItem(models.Model):
+    # ... بقية الحقول الخاصة بك ...
+    trailer_url = models.URLField(blank=True, null=True)
+
+    # أضف هذه الدالة داخل الكلاس
+    def get_embed_url(self):
+        if not self.trailer_url:
+            return None
+        url = self.trailer_url
+        if 'youtu.be/' in url:
+            video_id = url.split('youtu.be/')[1].split('?')[0]
+            return f"https://www.youtube.com/embed/{video_id}"
+        elif 'watch?v=' in url:
+            video_id = url.split('watch?v=')[1].split('&')[0]
+            return f"https://www.youtube.com/embed/{video_id}"
+        elif 'embed/' in url:
+            return url
+        return url
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter video title'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter video description', 'rows': 4}),
