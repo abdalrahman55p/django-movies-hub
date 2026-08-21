@@ -1,6 +1,7 @@
 {% extends 'AdminPanel/base.html' %}
-{% block content %}
+{% load static %}
 
+{% block content %}
 <style>
     .video-card-container {
         background: #ffffff;
@@ -15,13 +16,6 @@
         overflow: hidden;
         max-width: 800px;
         margin: 0 auto 25px auto;
-        min-height: 250px;
-    }
-    .video-wrapper video, .video-wrapper iframe {
-        width: 100%;
-        height: 450px;
-        border: none;
-        display: block;
     }
     .poster-preview {
         max-width: 180px;
@@ -60,40 +54,28 @@
 
             <div class="video-card-container">
                 
-                <!-- مشغل الفيديو الذكي -->
-                <div class="video-wrapper">
+                <!-- مشغل الفيديو (نفس طريقة المسلسل تماماً) -->
+                <div class="video-wrapper mb-4">
                     {% if video.video %}
-                        <!-- تشغيل الملف المرفوع -->
-                        <video controls poster="{% if video.poster %}{{ video.poster.url }}{% endif %}">
-                            <source src="{{ video.video.url }}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                    {% elif video.trailer_url %}
-                        <!-- تشغيل روابط يوتيوب والروابط الخارجية -->
-                        {% if "youtube.com" in video.trailer_url or "youtu.be" in video.trailer_url %}
-                            <iframe id="yt-player" allowfullscreen></iframe>
-                            <script>
-                                (function() {
-                                    let rawUrl = "{{ video.trailer_url }}";
-                                    let videoId = "";
-                                    if (rawUrl.includes("youtu.be/")) {
-                                        videoId = rawUrl.split("youtu.be/")[1].split("?")[0];
-                                    } else if (rawUrl.includes("watch?v=")) {
-                                        videoId = rawUrl.split("watch?v=")[1].split("&")[0];
-                                    } else if (rawUrl.includes("embed/")) {
-                                        videoId = rawUrl.split("embed/")[1].split("?")[0];
-                                    }
-                                    document.getElementById("yt-player").src = "https://www.youtube.com/embed/" + videoId;
-                                })();
-                            </script>
-                        {% else %}
-                            <video controls poster="{% if video.poster %}{{ video.poster.url }}{% endif %}">
-                                <source src="{{ video.trailer_url }}" type="video/mp4">
+                        <!-- 1. إذا كان ملف مرفوع مباشرة -->
+                        <div class="ratio ratio-16x9">
+                            <video controls poster="{% if video.poster %}{{ video.poster.url }}{% endif %}" style="width:100%; height:100%;">
+                                <source src="{{ video.video.url }}" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
-                        {% endif %}
+                        </div>
+                    {% elif video.get_embed_url %}
+                        <!-- 2. باستخدام داله get_embed_url إن وجدت في الموديل -->
+                        <div class="ratio ratio-16x9">
+                            <iframe src="{{ video.get_embed_url }}" title="{{ video.title }}" allowfullscreen style="border:0; width:100%; height:450px;"></iframe>
+                        </div>
+                    {% elif video.trailer_url %}
+                        <!-- 3. باستخدام الرابط المباشر للـ trailer_url -->
+                        <div class="ratio ratio-16x9">
+                            <iframe src="{{ video.trailer_url }}" title="{{ video.title }}" allowfullscreen style="border:0; width:100%; height:450px;"></iframe>
+                        </div>
                     {% else %}
-                        <div class="p-4 text-center text-white flex items-center justify-center h-full">No Video File or URL Uploaded</div>
+                        <div class="p-4 text-center text-white">🎥 No video file or trailer available.</div>
                     {% endif %}
                 </div>
 
@@ -102,7 +84,7 @@
                     {% if video.poster %}
                         <div class="col-md-3 text-center">
                             <div class="info-label">Poster</div>
-                            <img src="{{ video.poster.url }}" alt="{{ video.title }}" class="poster-preview">
+                            <img src="{{ video.poster.url }}" alt="{{ video.title }}" class="poster-preview img-fluid">
                         </div>
                     {% endif %}
 
