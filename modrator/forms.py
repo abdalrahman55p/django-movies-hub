@@ -1,60 +1,25 @@
-from django import forms
-from .models import VideoItem, Category, VideoType, Series
+from django.shortcuts import render, get_object_or_404
+from .models import VideoItem
 
+def videoDetails(request, id):
+    video = get_object_or_404(VideoItem, id=id)
+    
+    # تحويل رابط يوتيوب ليعمل داخل iframe
+    embed_url = None
+    if video.trailer_url:
+        url = video.trailer_url
+        if "youtube.com/watch?v=" in url:
+            video_id = url.split("watch?v=")[1].split("&")[0]
+            embed_url = f"https://www.youtube.com/embed/{video_id}"
+        elif "youtu.be/" in url:
+            video_id = url.split("youtu.be/")[1].split("?")[0]
+            embed_url = f"https://www.youtube.com/embed/{video_id}"
+        else:
+            embed_url = url
 
-class CategoryForm(forms.ModelForm):
-    class Meta:
-        model = Category
-        fields = '__all__'
-
-
-class VideoTypeForm(forms.ModelForm):
-    class Meta:
-        model = VideoType
-        fields = '__all__'
-
-
-class SeriesForm(forms.ModelForm):
-    class Meta:
-        model = Series
-        fields = ['title', 'description', 'seriesPoster', 'seriesVideo', 'trailer_url']
-        labels = {
-            'title': 'Series Title',
-            'description': 'Description',
-            'seriesPoster': 'Upload Series Poster',
-            'seriesVideo': 'Upload Series Video File',
-            'trailer_url': 'Trailer Link / URL',
-        }
-        widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter series title'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter series description'}),
-            'seriesPoster': forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
-            'seriesVideo': forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'video/*'}),
-            'trailer_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://...'}),
-        }
-
-
-class VideoItemForm(forms.ModelForm):
-    class Meta:
-        model = VideoItem
-        fields = ['title', 'description', 'video', 'trailer_url', 'poster', 'itemCategory', 'itemType', 'series']
-        labels = {
-            'title': 'Video Title',
-            'description': 'Description',
-            'video': 'Upload Video File',
-            'trailer_url': 'Trailer Link / URL',
-            'poster': 'Upload Poster',
-            'itemCategory': 'Category',
-            'itemType': 'Video Type',
-            'series': 'Series',
-        }
-        widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter video title'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter video description', 'rows': 4}),
-            'video': forms.ClearableFileInput(attrs={'class': 'form-control'}),
-            'trailer_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://www.youtube.com/watch?v=...'}),
-            'poster': forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
-            'itemCategory': forms.Select(attrs={'class': 'form-control'}),
-            'itemType': forms.Select(attrs={'class': 'form-control'}),
-            'series': forms.Select(attrs={'class': 'form-control'}),
-        }
+    context = {
+        'video': video,
+        'embed_url': embed_url,
+    }
+    # تأكد تماماً أن المسار يشير لـ AdminPanel/videoDetails.html
+    return render(request, 'AdminPanel/videoDetails.html', context)
