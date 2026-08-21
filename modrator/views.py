@@ -112,7 +112,6 @@ def newVideoItem(request):
         form = VideoItemForm()
     return render(request, 'AdminPanel/newVideo.html', {'form': form})
 
-
 def videoDetails(request, id):
     video = get_object_or_404(VideoItem, id=id)
     
