@@ -25,22 +25,31 @@
           {% endif %}
         </div>
 
-        <!-- الفيديو -->
+        <!-- التريلر / الفيديو -->
         <div class="text-center mb-4">
-          {% if series.seriesVideo %}
-            <video controls width="100%" class="rounded shadow">
-              <source src="{{ series.seriesVideo.url }}" type="video/mp4">
-              متصفحك لا يدعم عرض الفيديو 🎥
-            </video>
+          {% if series.get_embed_url %}
+            <div class="ratio ratio-16x9 rounded shadow overflow-hidden">
+              <iframe src="{{ series.get_embed_url }}" 
+                      title="{{ series.title }}" 
+                      allowfullscreen 
+                      style="border: 0;"></iframe>
+            </div>
+          {% elif series.trailer_url %}
+            <div class="ratio ratio-16x9 rounded shadow overflow-hidden">
+              <iframe src="{{ series.trailer_url }}" 
+                      title="{{ series.title }}" 
+                      allowfullscreen 
+                      style="border: 0;"></iframe>
+            </div>
           {% else %}
-            <p class="text-center text-muted">🎥 No video available for this series.</p>
+            <p class="text-center text-muted">🎥 No trailer available for this series.</p>
           {% endif %}
         </div>
 
         <!-- الوصف -->
         <fieldset class="name">
           <div class="body-title text-danger">Description</div>
-          <textarea class="form-control text-danger" rows="17" disabled>{{ series.description }}</textarea>
+          <textarea class="form-control text-danger bg-dark" rows="5" disabled>{{ series.description }}</textarea>
         </fieldset>
 
         <!-- التاريخ -->
