@@ -54,10 +54,6 @@ def admin_only(user):
 
 
 
-@admin.register(Series)
-class SeriesAdmin(admin.ModelAdmin):
-    list_display = ['title', 'seriesPoster', 'seriesVideo']
-
 
 
 def search(request):

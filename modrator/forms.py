@@ -14,12 +14,11 @@ class VideoTypeForm(forms.ModelForm):
         fields = '__all__'
 
 
-
-
 class SeriesForm(forms.ModelForm):
     class Meta:
         model = Series
-        fields = ['title', 'description', 'seriesPoster', 'seriesVideo']
+        fields = ['title', 'description', 'seriesPoster', 'trailer_url']
+
 
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter series title'}),
@@ -30,18 +29,10 @@ class SeriesForm(forms.ModelForm):
 
 
 
-
-
-
 class VideoItemForm(forms.ModelForm):
-    title = forms.CharField(
-        max_length=150,
-        widget=forms.TextInput(attrs={
-            'placeholder': 'Enter video title',
-            'id': 'title',
-            'class': 'form-control'
-        })
-    )
+    class Meta:
+        model = VideoItem
+        fields = ['title', 'description', 'video', 'trailer_url', 'poster', 'itemCategory', 'itemType', 'series']
 
     description = forms.CharField(
         widget=forms.Textarea(attrs={
