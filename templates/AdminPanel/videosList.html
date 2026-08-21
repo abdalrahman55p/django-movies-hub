@@ -13,10 +13,17 @@
   <div class="videos-grid">
     {% for video in videos %}
       <div class="video-card">
-        <img src="{{ video.poster.url }}" alt="{{ video.title }}">
+        {% if video.poster %}
+          <img src="{{ video.poster.url }}" alt="{{ video.title }}">
+        {% else %}
+          <div style="height:110px; background:#222; display:flex; align-items:center; justify-content:center; color:#666;">No Poster</div>
+        {% endif %}
+        
         <div class="video-info">
           <h4>{{ video.title }}</h4>
-          <p>{{ video.category.title }} • {{ video.type.title }}</p>
+          <!-- تم تصحيح المسميات لتطابق موديل VideoItem -->
+          <p>{{ video.itemCategory.title|default:"No Category" }} • {{ video.itemType.title|default:"No Type" }}</p>
+          
           <div class="btn-group">
             <a href="{% url 'videoDetails' video.id %}" class="watch-btn">🎥 View</a>
 
