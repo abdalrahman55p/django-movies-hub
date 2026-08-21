@@ -1,73 +1,114 @@
 {% extends 'AdminPanel/base.html' %}
 {% block content %}
 
+<style>
+    .video-card-container {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .video-wrapper {
+        position: relative;
+        background: #000;
+        border-radius: 10px;
+        overflow: hidden;
+        max-width: 800px;
+        margin: 0 auto 25px auto;
+    }
+    .video-wrapper video {
+        width: 100%;
+        max-height: 450px;
+        display: block;
+    }
+    .poster-preview {
+        max-width: 180px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .info-label {
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 6px;
+    }
+    .info-box {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 10px 15px;
+        color: #333;
+        font-size: 15px;
+    }
+</style>
+
 <div class="main-content">
     <div class="main-content-inner">
         <div class="main-content-wrap">
+            
+            <!-- Breadcrumbs -->
             <div class="flex items-center flex-wrap justify-between gap20 mb-30">
-                <h3>Video Details </h3>
+                <h3>Video Details</h3>
                 <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
-                    <li>
-                        <a href="{% url 'adminHome' %}">
-                            <div class="text-tiny">Dashboard</div>
-                        </a>
-                    </li>
+                    <li><a href="{% url 'adminHome' %}"><div class="text-tiny">Dashboard</div></a></li>
                     <li><i class="icon-chevron-right"></i></li>
-                    <li>
-                        <a href="{% url 'videosList' %}" role="button">
-                            <div class="text-tiny">Videos</div>
-                        </a>
-                    </li>
+                    <li><a href="{% url 'videosList' %}"><div class="text-tiny">Videos</div></a></li>
                     <li><i class="icon-chevron-right"></i></li>
-                    <li>
-                        <div class="text-tiny">{{ video.title }}</div>
-                    </li>
+                    <li><div class="text-tiny">{{ video.title }}</div></li>
                 </ul>
             </div>
 
-            <div class="wg-box mb-30">
-                <!-- عرض البوستر -->
-                {% if video.poster %}
-                    <div class="mb-20">
-                        <img src="{{ video.poster.url }}" alt="{{ video.title }}" style="max-width:200px; border-radius: 8px;">
-                    </div>
-                {% endif %}
-
-                <!-- عرض مشغل الفيديو (الملف المرفوع أولاً ثم الرابط الخارجى) -->
-                <div class="mb-20">
+            <div class="video-card-container">
+                
+                <!-- مشغل الفيديو -->
+                <div class="video-wrapper">
                     {% if video.video %}
-                        <video controls style="width:100%; max-width:600px; border-radius: 8px;">
+                        <video controls poster="{% if video.poster %}{{ video.poster.url }}{% endif %}">
                             <source src="{{ video.video.url }}" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
                     {% elif video.trailer_url %}
-                        <video controls style="width:100%; max-width:600px; border-radius: 8px;">
+                        <video controls poster="{% if video.poster %}{{ video.poster.url }}{% endif %}">
                             <source src="{{ video.trailer_url }}" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
                     {% else %}
-                        <p class="text-danger">No video file or URL available.</p>
+                        <div class="p-4 text-center text-white">No Video File or URL Uploaded</div>
                     {% endif %}
                 </div>
-<fieldset class="name">
-    <div class="body-title">Video title</div>
-    <input type="text" class="form-control" value="{{ video.title|default:'' }}" disabled>
-</fieldset>
 
-<fieldset class="name">
-    <div class="body-title">Description</div>
-    <textarea class="form-control" rows="3" disabled>{{ video.description|default:'' }}</textarea>
-</fieldset>
+                <!-- عرض البوستر والبيانات -->
+                <div class="row g-4">
+                    {% if video.poster %}
+                        <div class="col-md-3 text-center">
+                            <div class="info-label">Poster</div>
+                            <img src="{{ video.poster.url }}" alt="{{ video.title }}" class="poster-preview">
+                        </div>
+                    {% endif %}
 
-<fieldset class="name">
-    <div class="body-title">Type</div>
-    <input type="text" class="form-control" value="{{ video.itemType|default:'' }}" disabled>
-</fieldset>
+                    <div class="{% if video.poster %}col-md-9{% else %}col-md-12{% endif %}">
+                        <div class="mb-3">
+                            <div class="info-label">Title</div>
+                            <div class="info-box">{{ video.title }}</div>
+                        </div>
 
-<fieldset class="name">
-    <div class="body-title">Category</div>
-    <input type="text" class="form-control" value="{{ video.itemCategory|default:'' }}" disabled>
-</fieldset>
+                        <div class="mb-3">
+                            <div class="info-label">Description</div>
+                            <div class="info-box">{{ video.description|default:"No description provided." }}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="info-label">Category</div>
+                                <div class="info-box">{{ video.itemCategory|default:"Uncategorized" }}</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="info-label">Type</div>
+                                <div class="info-box">{{ video.itemType|default:"N/A" }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
