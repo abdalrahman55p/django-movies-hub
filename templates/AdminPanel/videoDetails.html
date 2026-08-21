@@ -54,25 +54,20 @@
 
             <div class="video-card-container">
                 
-                <!-- مشغل الفيديو (نفس طريقة المسلسل تماماً) -->
+                <!-- مشغل الفيديو والـ Trailer -->
                 <div class="video-wrapper mb-4">
                     {% if video.video %}
-                        <!-- 1. إذا كان ملف مرفوع مباشرة -->
+                        <!-- 1. إذا تم رفع فيديو ملف من الجهاز -->
                         <div class="ratio ratio-16x9">
-                            <video controls poster="{% if video.poster %}{{ video.poster.url }}{% endif %}" style="width:100%; height:100%;">
+                            <video controls poster="{% if video.poster %}{{ video.poster.url }}{% endif %}" style="width:100%; height:450px;">
                                 <source src="{{ video.video.url }}" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
                         </div>
-                    {% elif video.get_embed_url %}
-                        <!-- 2. باستخدام داله get_embed_url إن وجدت في الموديل -->
+                    {% elif embed_url %}
+                        <!-- 2. إذا كان هناك رابط تريلر / يوتيوب -->
                         <div class="ratio ratio-16x9">
-                            <iframe src="{{ video.get_embed_url }}" title="{{ video.title }}" allowfullscreen style="border:0; width:100%; height:450px;"></iframe>
-                        </div>
-                    {% elif video.trailer_url %}
-                        <!-- 3. باستخدام الرابط المباشر للـ trailer_url -->
-                        <div class="ratio ratio-16x9">
-                            <iframe src="{{ video.trailer_url }}" title="{{ video.title }}" allowfullscreen style="border:0; width:100%; height:450px;"></iframe>
+                            <iframe src="{{ embed_url }}" title="{{ video.title }}" allowfullscreen style="border:0; width:100%; height:450px;"></iframe>
                         </div>
                     {% else %}
                         <div class="p-4 text-center text-white">🎥 No video file or trailer available.</div>

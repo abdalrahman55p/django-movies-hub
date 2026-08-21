@@ -194,10 +194,29 @@ def deleteVideoItem(request, id):
     videoItem.delete()
     return redirect('videosList')
 
-
 def videoDetails(request, id):
-    video = VideoItem.objects.get(id=id)
-    return render(request, 'AdminPanel/videoDetails.html',context = {'video': video})
+    video = get_object_or_404(VideoItem, id=id)
+    
+    # تحويل رابط يوتيوب تلقائياً إلى رابط Embed يعمل داخل iframe
+    embed_url = None
+    if video.trailer_url:
+        url = video.trailer_url
+        if 'youtu.be/' in url:
+            video_id = url.split('youtu.be/')[1].split('?')[0]
+            embed_url = f"https://www.youtube.com/embed/{video_id}"
+        elif 'watch?v=' in url:
+            video_id = url.split('watch?v=')[1].split('&')[0]
+            embed_url = f"https://www.youtube.com/embed/{video_id}"
+        elif 'embed/' in url:
+            embed_url = url
+        else:
+            embed_url = url
+
+    context = {
+        'video': video,
+        'embed_url': embed_url
+    }
+    return render(request, 'AdminPanel/videoDetails.html', context)
 
 
 
