@@ -2,61 +2,131 @@
 {% load static %}
 
 {% block content %}
-<style>
-    .details-container {
-        padding: 30px;
-        background-color: #111;
-        color: #fff;
-        min-height: 100vh;
-    }
-    .video-box {
-        max-width: 800px;
-        margin: 0 auto 20px auto;
-        background: #000;
-        border-radius: 10px;
-        overflow: hidden;
-    }
-    .info-card {
-        max-width: 800px;
-        margin: 0 auto;
-        background: #222;
-        padding: 20px;
-        border-radius: 8px;
-    }
-    .badge-custom {
-        background: #e50914;
-        color: #fff;
-        padding: 5px 10px;
-        border-radius: 4px;
-        font-size: 0.85rem;
-    }
-</style>
-
-<div class="details-container">
-    <div class="mb-4">
-        <a href="{% url 'videosList' %}" style="color: #999; text-decoration: none;">← Back to Videos</a>
+<div class="video-details-container">
+    <div class="header-actions">
+        <a href="{% url 'videosList' %}" class="back-link">← Back to Videos</a>
     </div>
 
-    <div class="video-box">
+    <div class="player-wrapper">
+        <!-- 1. إذا كان الفيديو ملف مرفوع -->
         {% if video.video %}
-            <video controls style="width:100%; max-height:450px;">
+            <video controls autoplay class="main-video">
                 <source src="{{ video.video.url }}" type="video/mp4">
+                Your browser does not support the video tag.
             </video>
+
+        <!-- 2. إذا كان الفيديو عبارة عن رابط (Trailer / YouTube) -->
         {% elif embed_url %}
-            <iframe src="{{ embed_url }}" style="width:100%; height:450px; border:0;" allowfullscreen></iframe>
+            <iframe 
+                src="{{ embed_url }}" 
+                title="{{ video.title }}" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen 
+                class="main-frame">
+            </iframe>
+
+        <!-- 3. في حالة عدم وجود فيديو أو رابط (عرض البوستر فقط) -->
+        {% elif video.poster %}
+            <div class="poster-fallback">
+                <img src="{{ video.poster.url }}" alt="{{ video.title }}">
+                <p>No video player available for this item.</p>
+            </div>
         {% else %}
-            <div style="padding: 50px; text-center; color: #888;">No video file or valid URL stream available.</div>
+            <div class="no-media">
+                <p>No video file or URL link provided.</p>
+            </div>
         {% endif %}
     </div>
 
-    <div class="info-card">
-        <h2>{{ video.title }}</h2>
-        <p style="color: #aaa; margin-top: 10px;">{{ video.description|default:"No description provided." }}</p>
-        
-        <div style="margin-top: 20px; display: flex; gap: 10px;">
-            <span class="badge-custom">Category: {{ video.itemCategory|default:"None" }}</span>
-            <span class="badge-custom" style="background:#444;">Type: {{ video.itemType|default:"None" }}</span>
+    <div class="details-card">
+        <h1>{{ video.title }}</h1>
+        <hr>
+        <p class="description">{{ video.description|default:"No description available." }}</p>
+
+        <div class="meta-info">
+            <span class="badge">Category: {{ video.itemCategory.title|default:"Uncategorized" }}</span>
+            <span class="badge secondary">Type: {{ video.itemType.title|default:"General" }}</span>
+            {% if video.series %}
+                <span class="badge series">Series: {{ video.series.title }}</span>
+            {% endif %}
         </div>
     </div>
 </div>
+
+<style>
+    .video-details-container {
+        padding: 30px;
+        background-color: #0b0b0b;
+        color: #fff;
+        min-height: 100vh;
+    }
+    .back-link {
+        color: #e50914;
+        text-decoration: none;
+        font-weight: bold;
+        display: inline-block;
+        margin-bottom: 15px;
+    }
+    .player-wrapper {
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto 25px auto;
+        background: #000;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+    }
+    .main-video, .main-frame {
+        width: 100%;
+        height: 480px;
+        border: none;
+        display: block;
+    }
+    .poster-fallback {
+        text-align: center;
+        padding: 20px;
+    }
+    .poster-fallback img {
+        max-height: 350px;
+        border-radius: 8px;
+    }
+    .details-card {
+        max-width: 900px;
+        margin: 0 auto;
+        background: #141414;
+        padding: 25px;
+        border-radius: 12px;
+        border: 1px solid #222;
+    }
+    .details-card h1 {
+        color: #fff;
+        margin-bottom: 10px;
+    }
+    .description {
+        color: #ccc;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin: 15px 0;
+    }
+    .meta-info {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
+    .badge {
+        background: #e50914;
+        color: #fff;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+    }
+    .badge.secondary {
+        background: #333;
+    }
+    .badge.series {
+        background: #2b5296;
+    }
+</style>
 {% endblock %}
