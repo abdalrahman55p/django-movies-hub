@@ -15,10 +15,12 @@
         overflow: hidden;
         max-width: 800px;
         margin: 0 auto 25px auto;
+        min-height: 250px;
     }
-    .video-wrapper video {
+    .video-wrapper video, .video-wrapper iframe {
         width: 100%;
-        max-height: 450px;
+        height: 450px;
+        border: none;
         display: block;
     }
     .poster-preview {
@@ -45,7 +47,6 @@
     <div class="main-content-inner">
         <div class="main-content-wrap">
             
-            <!-- Breadcrumbs -->
             <div class="flex items-center flex-wrap justify-between gap20 mb-30">
                 <h3>Video Details</h3>
                 <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
@@ -59,24 +60,44 @@
 
             <div class="video-card-container">
                 
-                <!-- مشغل الفيديو -->
+                <!-- مشغل الفيديو الذكي -->
                 <div class="video-wrapper">
                     {% if video.video %}
+                        <!-- تشغيل الملف المرفوع -->
                         <video controls poster="{% if video.poster %}{{ video.poster.url }}{% endif %}">
                             <source src="{{ video.video.url }}" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
                     {% elif video.trailer_url %}
-                        <video controls poster="{% if video.poster %}{{ video.poster.url }}{% endif %}">
-                            <source src="{{ video.trailer_url }}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
+                        <!-- تشغيل روابط يوتيوب والروابط الخارجية -->
+                        {% if "youtube.com" in video.trailer_url or "youtu.be" in video.trailer_url %}
+                            <iframe id="yt-player" allowfullscreen></iframe>
+                            <script>
+                                (function() {
+                                    let rawUrl = "{{ video.trailer_url }}";
+                                    let videoId = "";
+                                    if (rawUrl.includes("youtu.be/")) {
+                                        videoId = rawUrl.split("youtu.be/")[1].split("?")[0];
+                                    } else if (rawUrl.includes("watch?v=")) {
+                                        videoId = rawUrl.split("watch?v=")[1].split("&")[0];
+                                    } else if (rawUrl.includes("embed/")) {
+                                        videoId = rawUrl.split("embed/")[1].split("?")[0];
+                                    }
+                                    document.getElementById("yt-player").src = "https://www.youtube.com/embed/" + videoId;
+                                })();
+                            </script>
+                        {% else %}
+                            <video controls poster="{% if video.poster %}{{ video.poster.url }}{% endif %}">
+                                <source src="{{ video.trailer_url }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        {% endif %}
                     {% else %}
-                        <div class="p-4 text-center text-white">No Video File or URL Uploaded</div>
+                        <div class="p-4 text-center text-white flex items-center justify-center h-full">No Video File or URL Uploaded</div>
                     {% endif %}
                 </div>
 
-                <!-- عرض البوستر والبيانات -->
+                <!-- تفاصيل الفيديو والبوستر -->
                 <div class="row g-4">
                     {% if video.poster %}
                         <div class="col-md-3 text-center">
