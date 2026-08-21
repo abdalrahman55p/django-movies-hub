@@ -15,12 +15,11 @@ class VideoType(models.Model):
     def __str__(self):
         return self.title
 
-
-class Series(models.Model): 
-    title = models.CharField(max_length=100)
-    description = models.TextField(null=True, blank=True)  
-    createdDate = models.DateTimeField(auto_now_add=True)
+class Series(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
     seriesPoster = models.ImageField(upload_to='series_posters/', blank=True, null=True)
+    seriesVideo = models.FileField(upload_to='series_videos/', blank=True, null=True) # أضف هذا السطر
     trailer_url = models.URLField(max_length=500, blank=True, null=True)
 
     def __str__(self):

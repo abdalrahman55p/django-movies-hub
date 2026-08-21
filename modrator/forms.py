@@ -12,19 +12,25 @@ class VideoTypeForm(forms.ModelForm):
     class Meta:
         model = VideoType
         fields = '__all__'
-
-
+        
 class SeriesForm(forms.ModelForm):
     class Meta:
         model = Series
-        fields = ['title', 'description', 'seriesPoster', 'trailer_url']
+        fields = ['title', 'description', 'seriesPoster', 'seriesVideo', 'trailer_url']
+        labels = {
+            'title': 'Series Title',
+            'description': 'Description',
+            'seriesPoster': 'Upload Series Poster',
+            'seriesVideo': 'Upload Series Video File', # اسم الخانة التي ستظهر
+            'trailer_url': 'Trailer Link / URL',
+        }
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter series title'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter series description'}),
             'seriesPoster': forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
-            'trailer_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://www.youtube.com/embed/XXXXXX'}),
+            'seriesVideo': forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'video/*'}),
+            'trailer_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://...'}),
         }
-
 
 class VideoItemForm(forms.ModelForm):
     class Meta:
