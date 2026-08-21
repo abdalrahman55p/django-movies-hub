@@ -26,45 +26,51 @@
             </div>
 
             <div class="wg-box mb-30">
+                <!-- عرض البوستر -->
                 {% if video.poster %}
                     <div class="mb-20">
-                        <img src="{{ video.poster.url }}" alt="{{ video.title }}" style="max-width:200px;">
+                        <img src="{{ video.poster.url }}" alt="{{ video.title }}" style="max-width:200px; border-radius: 8px;">
                     </div>
                 {% endif %}
 
-                {% if video.video %}
-                    <div class="mb-20">
-                        <video src="{{ video.video.url }}" controls style="max-width:400px;"></video>
-                        
-                    </div>
-                    
-                {% endif %}
+                <!-- عرض مشغل الفيديو (الملف المرفوع أولاً ثم الرابط الخارجى) -->
+                <div class="mb-20">
+                    {% if video.video %}
+                        <video controls style="width:100%; max-width:600px; border-radius: 8px;">
+                            <source src="{{ video.video.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    {% elif video.trailer_url %}
+                        <video controls style="width:100%; max-width:600px; border-radius: 8px;">
+                            <source src="{{ video.trailer_url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    {% else %}
+                        <p class="text-danger">No video file or URL available.</p>
+                    {% endif %}
+                </div>
+<fieldset class="name">
+    <div class="body-title">Video title</div>
+    <input type="text" class="form-control" value="{{ video.title|default:'' }}" disabled>
+</fieldset>
 
-                <fieldset class="name">
-                    <div class="body-title">Video title</div>
-                    <input type="text" class="form-control" value="{{ video.title }}" disabled>
-                </fieldset>
+<fieldset class="name">
+    <div class="body-title">Description</div>
+    <textarea class="form-control" rows="3" disabled>{{ video.description|default:'' }}</textarea>
+</fieldset>
 
-        
+<fieldset class="name">
+    <div class="body-title">Type</div>
+    <input type="text" class="form-control" value="{{ video.itemType|default:'' }}" disabled>
+</fieldset>
 
-                <fieldset class="name">
-                    <div class="body-title">Description</div>
-                    <textarea class="form-control" rows="3" disabled>{{ video.description }}</textarea>
-                </fieldset>
-
-                <fieldset class="name">
-                    <div class="body-title">Type</div>
-                    <input type="text" class="form-control" value="{{ video.itemType }}" disabled>
-                </fieldset>
-
-                <fieldset class="name">
-                    <div class="body-title">Category</div>
-                    <input type="text" class="form-control" value="{{ video.itemCategory }}" disabled>
-                </fieldset>
+<fieldset class="name">
+    <div class="body-title">Category</div>
+    <input type="text" class="form-control" value="{{ video.itemCategory|default:'' }}" disabled>
+</fieldset>
             </div>
         </div>
     </div>
 </div>
 
 {% endblock content %}
-
