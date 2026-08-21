@@ -32,8 +32,16 @@ class SeriesForm(forms.ModelForm):
 class VideoItemForm(forms.ModelForm):
     class Meta:
         model = VideoItem
+        # الحقول المكتوبة هنا هي فقط التي ستظهر في الصفحة عبر {{ form.as_p }}
         fields = ['title', 'description', 'video', 'trailer_url', 'poster', 'itemCategory', 'itemType', 'series']
-
+        
+        # يمكنك تخصيص شكل وشعار الخانة (Placeholder) من هنا مباشرة
+        widgets = {
+            'trailer_url': forms.URLInput(attrs={
+                'placeholder': 'https://example.com/file.apk أو رابط التريلر',
+                'class': 'form-control'
+            }),
+        }
     description = forms.CharField(
         widget=forms.Textarea(attrs={
             'placeholder': 'Enter video description',
