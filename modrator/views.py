@@ -197,8 +197,7 @@ def deleteVideoItem(request, id):
 
 def videoDetails(request, id):
     video = VideoItem.objects.get(id=id)
-    context = {'video': video}
-    return render(request, 'AdminPanel/videoDetails.html', context)
+    return render(request, 'AdminPanel/videoDetails.html',context = {'video': video})
 
 
 
