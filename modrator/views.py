@@ -295,3 +295,9 @@ def search_series(request):
     query = request.GET.get('q', '').strip()
     series_list = Series.objects.filter(title__icontains=query) if query else []
     return render(request, 'AdminPanel/search_series.html', {'series_list': series_list, 'query': query})
+
+
+def is_mobile(request):
+    user_agent = request.META.get('HTTP_USER_AGENT', '').lower()
+    mobile_keywords = ['android', 'iphone', 'ipad', 'ipod', 'blackberry', 'mobile']
+    return any(keyword in user_agent for keyword in mobile_keywords)

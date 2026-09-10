@@ -74,8 +74,16 @@
   .netflix-glow {
     box-shadow: 0 0 8px rgba(229, 9, 20, 0.4);
   }
+
+  .restricted-msg {
+    text-align: center;
+    padding: 50px 20px;
+    color: #e50914;
+    font-size: 1rem;
+  }
 </style>
 
+{% if not 'Mobile' in request.META.HTTP_USER_AGENT and not 'Android' in request.META.HTTP_USER_AGENT and not 'iPhone' in request.META.HTTP_USER_AGENT %}
 <div class="upload-container netflix-glow">
   <h2>📺 Add New Series</h2>
   <form method="post" enctype="multipart/form-data">
@@ -84,4 +92,11 @@
     <button type="submit" class="btn-upload">Upload Series</button>
   </form>
 </div>
+{% else %}
+<div class="restricted-msg">
+  <h3>⚠️ هذه الصفحة مخصصة للاستخدام من جهاز الكمبيوتر (Laptop) فقط.</h3>
+  <p>غير مسموح بإضافة أو تعديل المسلسلات من الهواتف المحمولة.</p>
+</div>
+{% endif %}
+
 {% endblock %}
