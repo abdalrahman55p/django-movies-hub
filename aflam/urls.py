@@ -5,9 +5,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
 from modrator import views
 
 urlpatterns = [
+    # 0. Auth Login direct path fix
+    path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+
     # 1. Admin & Core
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
@@ -25,10 +30,10 @@ urlpatterns = [
     path('deleteCategory/<int:id>/', views.deleteCategory, name='deleteCategory'),
     
     path('newVideoType/', views.newVideoType, name='newVideoType'),
-    path('videoTypeList/', views.typeList, name='videoTypeList'),
+    path('videoTypeList/', views.typeList, name='typeList'),
     path('deleteVideoType/<int:id>/', views.deleteVideoType, name='deleteVideoType'),
 
-    # 4. Series (تم توحيد النمط هنا)
+    # 4. Series
     path('series/', views.series, name='series'),
     path('seriesList/', views.seriesList, name='seriesList'),
     path('newSeries/', views.newSeries, name='newSeries'),
@@ -38,7 +43,7 @@ urlpatterns = [
     path('editSeries/<int:series_id>/', views.editSeries, name='editSeries'),
     path('deleteSeries/<int:id>/', views.deleteSeries, name='deleteSeries'),
 
-    # 5. Movies & Videos (تم تعديل المسار هنا ليصبح videos/<int:id>/ تماماً كالمسلسلات)
+    # 5. Movies & Videos
     path('movies/', views.movies_list, name='movies_list'),
     path('newVideoItem/', views.newVideoItem, name='newVideoItem'),
     path('videosList/', views.videosList, name='videosList'),
