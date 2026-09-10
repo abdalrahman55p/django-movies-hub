@@ -221,7 +221,28 @@ def series(request):
 
 def series_detail(request, series_id):
     series = get_object_or_404(Series, id=series_id)
-    return render(request, 'AdminPanel/series_detail.html', {'series': series})
+    
+    # استخراج الرابط وإعداد الـ embed_url تماماً مثل الفيديوهات
+    url = getattr(series, 'trailer_url', None) or getattr(series, 'video_url', None) or getattr(series, 'url', None)
+    
+    embed_url = None
+    if url:
+        if 'youtu.be/' in url:
+            video_id = url.split('youtu.be/')[1].split('?')[0]
+            embed_url = f"https://www.youtube.com/embed/{video_id}"
+        elif 'watch?v=' in url:
+            video_id = url.split('watch?v=')[1].split('&')[0]
+            embed_url = f"https://www.youtube.com/embed/{video_id}"
+        elif 'embed/' in url:
+            embed_url = url
+        else:
+            embed_url = url
+
+    context = {
+        'series': series,
+        'embed_url': embed_url
+    }
+    return render(request, 'AdminPanel/series_detail.html', context)
 
 
 @user_passes_test(admin_or_super_only, login_url='/login/')
