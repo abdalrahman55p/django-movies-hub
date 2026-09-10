@@ -9,24 +9,24 @@ from .models import VideoItem, Category, VideoType, Series, Movie, SiteSettings
 from .forms import CategoryForm, VideoTypeForm, SeriesForm, VideoItemForm
 
 
-# 1. دالة الصلاحيات المشددة (التحقق من حساب الأدمن + حماية الحساب)
+# 1. دالة الصلاحيات المشددة (التحقق الصارم من حساب الأدمن)
 def admin_or_super_only(user):
-    # يلزم أن يكون المستخدم مسجلاً لدخوله وأن يمتلك صلاحيات Superuser أو Staff
     return user.is_authenticated and (user.is_superuser or user.is_staff)
 
 
-# دالة فحص جهاز المستخدم (مستندة للعنوان المحلي لجهازك)
-def restrict_to_local_device(request):
-    client_ip = request.META.get('REMOTE_ADDR')
-    # يمنع الوصول إذا لم يكن الطلب قادماً من جهازك محلياً
-    if client_ip not in ['127.0.0.1', 'localhost', '::1']:
-        raise PermissionDenied("غير مسموح بالدخول أو إجراء عمليات التعديل من هذا الجهاز.")
+# دالة جلب IP الجهاز الحقيقي سواء محلياً أو على سيرفر أونلاين
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0].strip()
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
 
 
 # 2. الإعدادات والصفحة الرئيسية
-@user_passes_test(admin_or_super_only)
+@user_passes_test(admin_or_super_only, login_url='/login/')
 def settings_page(request):
-    restrict_to_local_device(request)
     settings = SiteSettings.objects.first() or SiteSettings.objects.create()
     if request.method == "POST":
         settings.site_name = request.POST.get("site_name")
@@ -47,9 +47,8 @@ def home(request):
     return redirect('adminHome')
 
 
-@user_passes_test(admin_or_super_only)
+@user_passes_test(admin_or_super_only, login_url='/login/')
 def adminHome(request):
-    restrict_to_local_device(request)
     return render(request, 'AdminPanel/base.html')
 
 
@@ -65,9 +64,8 @@ def signup(request):
 
 
 # 3. إدارة التصنيفات (Category)
-@user_passes_test(admin_or_super_only)
+@user_passes_test(admin_or_super_only, login_url='/login/')
 def newCategory(request):
-    restrict_to_local_device(request)
     if request.method == 'POST':
         title = request.POST.get('title')
         Category.objects.create(title=title)
@@ -81,18 +79,16 @@ def categoryList(request):
     return render(request, 'AdminPanel/category-list.html', {'categores': categores})
 
 
-@user_passes_test(admin_or_super_only)
+@user_passes_test(admin_or_super_only, login_url='/login/')
 def deleteCategory(request, id):
-    restrict_to_local_device(request)
     category = get_object_or_404(Category, id=id)
     category.delete()
     return redirect('categoryList')
 
 
 # 4. إدارة أنواع الفيديوهات (VideoType)
-@user_passes_test(admin_or_super_only)
+@user_passes_test(admin_or_super_only, login_url='/login/')
 def newVideoType(request):
-    restrict_to_local_device(request)
     if request.method == 'POST':
         title = request.POST.get('title')
         VideoType.objects.create(title=title)
@@ -106,9 +102,8 @@ def typeList(request):
     return render(request, 'AdminPanel/typeList.html', {'Types': Types})
 
 
-@user_passes_test(admin_or_super_only)
+@user_passes_test(admin_or_super_only, login_url='/login/')
 def deleteVideoType(request, id):
-    restrict_to_local_device(request)
     videoType = get_object_or_404(VideoType, id=id)
     videoType.delete()
     return redirect('videoTypeList')
@@ -120,9 +115,8 @@ def videosList(request):
     return render(request, 'AdminPanel/videosList.html', {'videos': videos})
 
 
-@user_passes_test(admin_or_super_only)
+@user_passes_test(admin_or_super_only, login_url='/login/')
 def newVideoItem(request):
-    restrict_to_local_device(request)
     if request.method == 'POST':
         form = VideoItemForm(request.POST, request.FILES)
         if form.is_valid():
@@ -162,17 +156,15 @@ def videoDetails(request, id):
     return render(request, 'AdminPanel/videoDetails.html', context)
 
 
-@user_passes_test(admin_or_super_only)
+@user_passes_test(admin_or_super_only, login_url='/login/')
 def deleteVideoItem(request, id):
-    restrict_to_local_device(request)
     videoItem = get_object_or_404(VideoItem, id=id)
     videoItem.delete()
     return redirect('videosList')
 
 
-@user_passes_test(admin_or_super_only)
+@user_passes_test(admin_or_super_only, login_url='/login/')
 def deleteVideo(request, video_id):
-    restrict_to_local_device(request)
     video = get_object_or_404(VideoItem, id=video_id)
     video.delete()
     messages.success(request, "✅ تم حذف الفيديو بنجاح.")
@@ -180,9 +172,8 @@ def deleteVideo(request, video_id):
 
 
 # 6. إدارة المسلسلات (Series)
-@user_passes_test(admin_or_super_only)
+@user_passes_test(admin_or_super_only, login_url='/login/')
 def newSeries(request):
-    restrict_to_local_device(request)
     if request.method == 'POST':
         form = SeriesForm(request.POST, request.FILES)
         if form.is_valid():
@@ -206,9 +197,8 @@ def seriesList(request):
     return render(request, 'AdminPanel/seriesList.html', {'Series': series_list, 'series_list': series_list, 'search_query': search_query})
 
 
-@user_passes_test(admin_or_super_only)
+@user_passes_test(admin_or_super_only, login_url='/login/')
 def editSeries(request, id):
-    restrict_to_local_device(request)
     series = get_object_or_404(Series, id=id)
     if request.method == 'POST':
         form = SeriesForm(request.POST, request.FILES, instance=series)
@@ -234,9 +224,8 @@ def series_detail(request, series_id):
     return render(request, 'AdminPanel/series_detail.html', {'series': series})
 
 
-@user_passes_test(admin_or_super_only)
+@user_passes_test(admin_or_super_only, login_url='/login/')
 def add_series(request):
-    restrict_to_local_device(request)
     if request.method == 'POST':
         form = SeriesForm(request.POST, request.FILES)
         if form.is_valid():
@@ -256,9 +245,8 @@ def series_watch(request, series_id):
     return render(request, 'AdminPanel/series_watch.html', {'series': series})
 
 
-@user_passes_test(admin_or_super_only)
+@user_passes_test(admin_or_super_only, login_url='/login/')
 def deleteSeries(request, id):
-    restrict_to_local_device(request)
     series = get_object_or_404(Series, id=id)
     series.delete()
     messages.success(request, "✅ تم حذف المسلسل بنجاح.")
@@ -271,9 +259,8 @@ def movies_list(request):
     return render(request, 'movies_list.html', {'movies': movies})
 
 
-@user_passes_test(admin_or_super_only)
+@user_passes_test(admin_or_super_only, login_url='/login/')
 def add_movie(request):
-    restrict_to_local_device(request)
     return render(request, 'add_movie.html')
 
 
