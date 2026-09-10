@@ -225,3 +225,6 @@ FILE_UPLOAD_TEMP_DIR = 'D:/temp_uploads'
 # إنشاء المجلد برمجياً إذا لم يكن موجوداً
 if not os.path.exists(FILE_UPLOAD_TEMP_DIR):
     os.makedirs(FILE_UPLOAD_TEMP_DIR)
+
+    ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # أو خليه 'optional' لو مش عايز إجبار تأكيد الإيميل
