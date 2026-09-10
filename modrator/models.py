@@ -15,11 +15,12 @@ class VideoType(models.Model):
     def __str__(self):
         return self.title
 
+
 class Series(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     seriesPoster = models.ImageField(upload_to='series_posters/', blank=True, null=True)
-    seriesVideo = models.FileField(upload_to='series_videos/', blank=True, null=True) # أضف هذا السطر
+    seriesVideo = models.FileField(upload_to='series_videos/', blank=True, null=True)
     trailer_url = models.URLField(max_length=500, blank=True, null=True)
 
     def __str__(self):
@@ -30,13 +31,13 @@ class VideoItem(models.Model):
     title = models.CharField(max_length=200, verbose_name="Title")
     description = models.TextField(blank=True, null=True, verbose_name="Description")
     poster = models.ImageField(upload_to='video_posters/', verbose_name="Video Poster")
-    video_file = models.FileField(upload_to='video_files/', verbose_name="Video File")
-    trailer_url = models.URLField(blank=True, null=True, verbose_name="Trailer URL (Optional)")
+    # جعل الحقل اختيارياً لتجنب مشاكل 413 Request Entity Too Large
+    video_file = models.FileField(upload_to='video_files/', blank=True, null=True, verbose_name="Video File (Optional)")
+    trailer_url = models.URLField(blank=True, null=True, verbose_name="Video URL / Trailer URL")
 
     def __str__(self):
         return self.title
 
-    
     def get_embed_url(self):
         if not self.trailer_url:
             return None
@@ -52,7 +53,6 @@ class VideoItem(models.Model):
         return url
 
 
-# الموديل المطلوب لإصلاح ImportError
 class Movie(models.Model):
     title = models.CharField(max_length=200)
     video_file = models.FileField(upload_to='videos/', blank=True, null=True)
