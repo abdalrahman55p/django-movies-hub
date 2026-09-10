@@ -130,3 +130,6 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 # Admin Interface Popups Configuration
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 SILENCED_SYSTEM_CHECKS = ['security.W019']
+
+LOGIN_REDIRECT_URL = '/adminHome/'
+LOGOUT_REDIRECT_URL = '/login/'
