@@ -8,15 +8,8 @@
     </div>
 
     <div class="player-wrapper">
-        <!-- 1. تشغيل فيديو المسلسل إن وجد -->
-        {% if series.seriesVideo %}
-            <video controls autoplay class="main-video" poster="{% if series.seriesPoster %}{{ series.seriesPoster.url }}{% endif %}">
-                <source src="{{ series.seriesVideo.url }}" type="video/mp4">
-                متصفحك لا يدعم تشغيل الفيديو.
-            </video>
-
-        <!-- 2. تشغيل رابط التريلر إن وجد -->
-        {% elif embed_url %}
+        <!-- 1. تشغيل رابط الأرشيف أو التريلر الخارجي أولاً -->
+        {% if embed_url %}
             <iframe 
                 src="{{ embed_url }}" 
                 title="{{ series.title }}" 
@@ -26,7 +19,14 @@
                 class="main-frame">
             </iframe>
 
-        <!-- 3. عرض البوستر إذا لم يتوفر فيديو -->
+        <!-- 2. تشغيل الفيديو المحلي إن وجد -->
+        {% elif series.seriesVideo %}
+            <video controls autoplay class="main-video" poster="{% if series.seriesPoster %}{{ series.seriesPoster.url }}{% endif %}">
+                <source src="{{ series.seriesVideo.url }}" type="video/mp4">
+                متصفحك لا يدعم تشغيل الفيديو.
+            </video>
+
+        <!-- 3. عرض البوستر إذا لم يتوفر أي فيديو -->
         {% elif series.seriesPoster %}
             <div class="poster-fallback">
                 <img src="{{ series.seriesPoster.url }}" alt="{{ series.title }}">
