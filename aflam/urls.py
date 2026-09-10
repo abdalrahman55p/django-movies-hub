@@ -10,7 +10,7 @@ from modrator import views
 
 urlpatterns = [
     # 0. Auth Login direct path fix
-    path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('login/', auth_views.LoginView.as_view(template_name='AdminPanel/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 
     # 1. Admin & Core
