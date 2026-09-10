@@ -260,6 +260,19 @@
     color: var(--admin-interface-generic-link-hover-color);
 }
 
+.admin-interface .selector button.selector-chooseall,
+.admin-interface .selector button.selector-clearall {
+    background-color: var(--admin-interface-generic-link-color);
+    padding: 8px 12px;
+}
+
+.admin-interface .selector button.selector-chooseall:focus,
+.admin-interface .selector button.selector-chooseall:hover,
+.admin-interface .selector button.selector-clearall:focus,
+.admin-interface .selector button.selector-clearall:hover {
+    background-color: var(--admin-interface-generic-link-hover-color);
+}
+
 /* fix #393  */
 .admin-interface .selector-chosen .list-footer-display {
     background: var(--admin-interface-module-background-color);
@@ -348,39 +361,41 @@
     color: var(--admin-interface-delete-button-text-color);
 }
 
-.admin-interface .paginator a,
-.admin-interface .paginator a:link,
-.admin-interface .paginator a:visited,
-.admin-interface .paginator .this-page {
+.admin-interface #changelist .changelist-footer .paginator a,
+.admin-interface #changelist .changelist-footer .paginator a:link,
+.admin-interface #changelist .changelist-footer .paginator a:visited,
+.admin-interface #changelist .changelist-footer .paginator a[aria-current="page"],
+.admin-interface #changelist .changelist-footer .paginator .this-page {
     border-radius: var(--admin-interface-module-border-radius);
 }
 
-.admin-interface .paginator a,
-.admin-interface .paginator a:link,
-.admin-interface .paginator a:visited {
+.admin-interface #changelist .changelist-footer .paginator a,
+.admin-interface #changelist .changelist-footer .paginator a:link,
+.admin-interface #changelist .changelist-footer .paginator a:visited {
     background-color: #FFFFFF;
     color: var(--admin-interface-generic-link-color);
 }
 
-.admin-interface .paginator a:hover,
-.admin-interface .paginator a:active {
+.admin-interface #changelist .changelist-footer .paginator a:hover,
+.admin-interface #changelist .changelist-footer .paginator a:active {
     background-color: #F8F8F8;
     color: var(--admin-interface-generic-link-hover-color);
 }
 
-.admin-interface .paginator .this-page {
+.admin-interface #changelist .changelist-footer .paginator a[aria-current="page"],
+.admin-interface #changelist .changelist-footer .paginator .this-page {
     background-color: var(--admin-interface-module-background-color);
     color: var(--admin-interface-module-link-color);
 }
 
-.admin-interface .paginator a.showall,
-.admin-interface .paginator a.showall:link,
-.admin-interface .paginator a.showall:visited {
+.admin-interface #changelist .changelist-footer .paginator a.showall,
+.admin-interface #changelist .changelist-footer .paginator a.showall:link,
+.admin-interface #changelist .changelist-footer .paginator a.showall:visited {
     color: var(--admin-interface-generic-link-color);
 }
 
-.admin-interface .paginator a.showall:hover,
-.admin-interface .paginator a.showall:active {
+.admin-interface #changelist .changelist-footer .paginator a.showall:hover,
+.admin-interface #changelist .changelist-footer .paginator a.showall:active {
     color: var(--admin-interface-generic-link-hover-color);
 }
 

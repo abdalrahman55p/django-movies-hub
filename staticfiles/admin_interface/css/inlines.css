@@ -10,10 +10,8 @@
 
 .admin-interface .inline-group .inlinechangelink {
     margin-left: 10px;
-}
-
-.admin-interface .inline-group .inline-related.tabular .inlinechangelink {
-    background-size: contain;
+    font-size: 11px;
+    padding-left: 18px;
 }
 /* end fix */
 
@@ -61,6 +59,10 @@
     text-align: right;
 }
 
+.admin-interface  .inline-group .tabular tr td.original p {
+    font-size: 11px;
+}
+
 .admin-interface .inline-group .tabular tr td {
     vertical-align: top;
 }
@@ -79,6 +81,8 @@
     margin-top: 4px;
     overflow: hidden;
     text-indent: 9999px;
+    width: 18px;
+    height: 18px;
 }
 /* end fix */
 

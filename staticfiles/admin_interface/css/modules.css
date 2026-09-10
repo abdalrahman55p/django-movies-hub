@@ -1,3 +1,8 @@
+.admin-interface .module {
+    width: 100%;
+    box-sizing: border-box;
+}
+
 /* begin fix lateral padding to align text with field labels */
 .admin-interface .module h2,
 .admin-interface.dashboard .module caption,

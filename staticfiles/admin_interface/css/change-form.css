@@ -1,3 +1,8 @@
+.admin-interface .submit-row {
+    width: 100%;
+    box-sizing: border-box;
+}
+
 /* fix form submit buttons alignemnt and ordering */
 @media (min-width: 768px) {
     .admin-interface .submit-row {
