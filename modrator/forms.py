@@ -15,7 +15,13 @@ class SeriesForm(forms.ModelForm):
     class Meta:
         model = Series
         fields = '__all__'
+
 class VideoItemForm(forms.ModelForm):
     class Meta:
         model = VideoItem
         fields = ['title', 'description', 'poster', 'video_file', 'trailer_url']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # جعل حقل الفيديو اختيارياً لتجنب إجبار المتصفح على رفع ملف
+        self.fields['video_file'].required = False
