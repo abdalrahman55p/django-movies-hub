@@ -22,7 +22,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'colorfield',
-    'admin_interface',
+    'admin_interface',  # تضع قبل django.contrib.admin لضمان عمل الواجهة بشكل صحيح
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -115,7 +115,7 @@ AUTHENTICATION_BACKENDS = [
 ACCOUNT_LOGIN_METHODS = {"email", "username"}
 ACCOUNT_SIGNUP_FIELDS = ["email*", "username*", "password1*", "password2*"]
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = 'optional'  # تم تغييرها لـ optional لتجنب أخطاء السيرفر عند عدم إعداد SMTP
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
 
 LOGIN_REDIRECT_URL = 'adminHome'
 LOGOUT_REDIRECT_URL = 'home'
@@ -126,3 +126,7 @@ SESSION_SAVE_EVERY_REQUEST = True
 # Crispy Forms Configuration
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+# Admin Interface Popups Configuration
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+SILENCED_SYSTEM_CHECKS = ['security.W019']
