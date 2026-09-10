@@ -218,3 +218,10 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 
 ALLOWED_HOSTS = ['*']
+import os
+
+FILE_UPLOAD_TEMP_DIR = 'D:/temp_uploads'
+
+# إنشاء المجلد برمجياً إذا لم يكن موجوداً
+if not os.path.exists(FILE_UPLOAD_TEMP_DIR):
+    os.makedirs(FILE_UPLOAD_TEMP_DIR)

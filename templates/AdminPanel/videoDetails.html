@@ -8,14 +8,14 @@
     </div>
 
     <div class="player-wrapper">
-        <!-- 1. إذا كان الفيديو ملف مرفوع -->
-        {% if video.video %}
-            <video controls autoplay class="main-video">
-                <source src="{{ video.video.url }}" type="video/mp4">
+        <!-- 1. تم تعديل video.video إلى video.video_file لطباق الموديل -->
+        {% if video.video_file %}
+            <video controls autoplay class="main-video" poster="{% if video.poster %}{{ video.poster.url }}{% endif %}">
+                <source src="{{ video.video_file.url }}" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
 
-        <!-- 2. إذا كان الفيديو عبارة عن رابط (Trailer / YouTube) -->
+        <!-- 2. إذا كان الفيديو رابط يوتيوب/خارجي -->
         {% elif embed_url %}
             <iframe 
                 src="{{ embed_url }}" 
@@ -26,7 +26,7 @@
                 class="main-frame">
             </iframe>
 
-        <!-- 3. في حالة عدم وجود فيديو أو رابط (عرض البوستر فقط) -->
+        <!-- 3. عرض البوستر فقط إذا لم يتوفر فيديو أو رابط -->
         {% elif video.poster %}
             <div class="poster-fallback">
                 <img src="{{ video.poster.url }}" alt="{{ video.title }}">
@@ -41,16 +41,8 @@
 
     <div class="details-card">
         <h1>{{ video.title }}</h1>
-        <hr>
+        <hr style="border-color: #333;">
         <p class="description">{{ video.description|default:"No description available." }}</p>
-
-        <div class="meta-info">
-            <span class="badge">Category: {{ video.itemCategory.title|default:"Uncategorized" }}</span>
-            <span class="badge secondary">Type: {{ video.itemType.title|default:"General" }}</span>
-            {% if video.series %}
-                <span class="badge series">Series: {{ video.series.title }}</span>
-            {% endif %}
-        </div>
     </div>
 </div>
 
@@ -83,13 +75,15 @@
         border: none;
         display: block;
     }
-    .poster-fallback {
+    .poster-fallback, .no-media {
         text-align: center;
-        padding: 20px;
+        padding: 40px 20px;
+        color: #aaa;
     }
     .poster-fallback img {
         max-height: 350px;
         border-radius: 8px;
+        margin-bottom: 15px;
     }
     .details-card {
         max-width: 900px;
@@ -108,25 +102,6 @@
         font-size: 1rem;
         line-height: 1.6;
         margin: 15px 0;
-    }
-    .meta-info {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-top: 20px;
-    }
-    .badge {
-        background: #e50914;
-        color: #fff;
-        padding: 6px 12px;
-        border-radius: 6px;
-        font-size: 0.85rem;
-    }
-    .badge.secondary {
-        background: #333;
-    }
-    .badge.series {
-        background: #2b5296;
     }
 </style>
 {% endblock %}

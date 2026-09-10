@@ -21,8 +21,6 @@
         
         <div class="video-info">
           <h4>{{ video.title }}</h4>
-          <!-- تم تصحيح المسميات لتطابق موديل VideoItem -->
-          <p>{{ video.itemCategory.title|default:"No Category" }} • {{ video.itemType.title|default:"No Type" }}</p>
           
           <div class="btn-group">
             <a href="{% url 'videoDetails' video.id %}" class="watch-btn">🎥 View</a>
@@ -107,14 +105,8 @@
 
   .video-info h4 {
     color: #fff;
-    margin: 5px 0;
+    margin: 5px 0 10px 0;
     font-size: 0.9rem;
-  }
-
-  .video-info p {
-    color: #999;
-    font-size: 0.8rem;
-    margin-bottom: 6px;
   }
 
   .btn-group {

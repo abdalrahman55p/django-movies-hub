@@ -25,9 +25,18 @@ class Series(models.Model):
     def __str__(self):
         return self.title
 
-class VideoItem(models.Model):
-    # ... حقولك الحالية (title, description, video, trailer_url, etc.) ...
 
+class VideoItem(models.Model):
+    title = models.CharField(max_length=200, verbose_name="Title")
+    description = models.TextField(blank=True, null=True, verbose_name="Description")
+    poster = models.ImageField(upload_to='video_posters/', verbose_name="Video Poster")
+    video_file = models.FileField(upload_to='video_files/', verbose_name="Video File")
+    trailer_url = models.URLField(blank=True, null=True, verbose_name="Trailer URL (Optional)")
+
+    def __str__(self):
+        return self.title
+
+    
     def get_embed_url(self):
         if not self.trailer_url:
             return None

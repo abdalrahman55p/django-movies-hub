@@ -5,14 +5,31 @@
 {% block content %}
 <div class="container py-4">
   <div class="row justify-content-center">
-    <div class="col-lg-5 col-md-7">
+    <div class="col-lg-6 col-md-8">
 
       <div class="card shadow border-0 rounded-3 bg-dark text-white">
         <div class="card-body p-3">
           <h4 class="text-center mb-3 fw-semibold" style="font-size: 1rem;">➕ Add New Series</h4>
 
+          <!-- إظهار رسائل الأخطاء والنجاح -->
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show p-2 style="font-size: 0.8rem;" role="alert">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+
           <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
+            
+            {% if form.errors %}
+              <div class="alert alert-danger p-2" style="font-size: 0.75rem;">
+                <strong>يرجى تصحيح الأخطاء التالية:</strong>
+                {{ form.errors }}
+              </div>
+            {% endif %}
+
             {{ form|crispy }}
             <button type="submit" class="btn btn-danger w-100 mt-2 py-1" style="font-size: 0.85rem;">Add Series</button>
           </form>
