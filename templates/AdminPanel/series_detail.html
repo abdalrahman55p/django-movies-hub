@@ -2,78 +2,116 @@
 {% load static %}
 
 {% block content %}
-<div class="container py-5 text-white">
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <div class="card bg-dark border-danger shadow-lg p-4">
-
-        <!-- العنوان -->
-        <h2 class="text-center text-danger fw-bold mb-4">{{ series.title }}</h2>
-
-        <!-- الصورة -->
-        <div class="text-center mb-4">
-          {% if series.seriesPoster %}
-            <img src="{{ series.seriesPoster.url }}" 
-                 alt="{{ series.title }}" 
-                 class="img-fluid rounded shadow" 
-                 style="max-height: 400px; object-fit: cover;">
-          {% else %}
-            <img src="{% static 'images/default-poster.jpg' %}" 
-                 alt="No image" 
-                 class="img-fluid rounded shadow" 
-                 style="max-height: 400px; object-fit: cover;">
-          {% endif %}
-        </div>
-
-        <!-- التريلر / الفيديو -->
-        <div class="text-center mb-4">
-          {% if series.get_embed_url %}
-            <div class="ratio ratio-16x9 rounded shadow overflow-hidden">
-              <iframe src="{{ series.get_embed_url }}" 
-                      title="{{ series.title }}" 
-                      allowfullscreen 
-                      style="border: 0;"></iframe>
-            </div>
-          {% elif series.trailer_url %}
-            <div class="ratio ratio-16x9 rounded shadow overflow-hidden">
-              <iframe src="{{ series.trailer_url }}" 
-                      title="{{ series.title }}" 
-                      allowfullscreen 
-                      style="border: 0;"></iframe>
-            </div>
-          {% else %}
-            <p class="text-center text-muted">🎥 No trailer available for this series.</p>
-          {% endif %}
-        </div>
-
-        <!-- الوصف -->
-        <fieldset class="name">
-          <div class="body-title text-danger">Description</div>
-          <textarea class="form-control text-danger bg-dark" rows="5" disabled>{{ series.description }}</textarea>
-        </fieldset>
-
-        <!-- التاريخ -->
-        <p class="text-center mt-3" style="color: red; font-weight: bold;">
-          📅 تاريخ الإضافة: {{ series.createdDate|date:"Y-m-d" }}
-        </p>
-
-        <!-- الأزرار -->
-        <div class="text-center mt-4">
-          <a href="{% url 'series' %}" class="btn btn-danger px-4">رجوع</a>
-
-          {% if request.user.is_staff or request.user.is_superuser %}
-          <form action="{% url 'deleteSeries' series.id %}" method="post" class="d-inline">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-outline-danger px-4 ms-2"
-                    onclick="return confirm('هل أنت متأكد أنك تريد حذف هذا المسلسل؟ 🗑️')">
-              حذف المسلسل
-            </button>
-          </form>
-          {% endif %}
-        </div>
-
-      </div>
+<div class="series-details-container" dir="rtl">
+    <div class="header-actions">
+        <a href="{% url 'seriesList' %}" class="back-link">← العودة للمسلسلات</a>
     </div>
-  </div>
+
+    <div class="player-wrapper">
+        <!-- 1. تشغيل فيديو المسلسل إن وجد -->
+        {% if series.seriesVideo %}
+            <video controls autoplay class="main-video" poster="{% if series.seriesPoster %}{{ series.seriesPoster.url }}{% endif %}">
+                <source src="{{ series.seriesVideo.url }}" type="video/mp4">
+                متصفحك لا يدعم تشغيل الفيديو.
+            </video>
+
+        <!-- 2. تشغيل رابط التريلر إن وجد -->
+        {% elif embed_url %}
+            <iframe 
+                src="{{ embed_url }}" 
+                title="{{ series.title }}" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen 
+                class="main-frame">
+            </iframe>
+
+        <!-- 3. عرض البوستر إذا لم يتوفر فيديو -->
+        {% elif series.seriesPoster %}
+            <div class="poster-fallback">
+                <img src="{{ series.seriesPoster.url }}" alt="{{ series.title }}">
+                <p>لا يوجد مشغل فيديو متاح لهذا المسلسل.</p>
+            </div>
+        {% else %}
+            <div class="no-media">
+                <p>لم يتم إضافة فيديو أو رابط للمسلسل.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="details-card">
+        <h1>{{ series.title }}</h1>
+        <hr style="border-color: #333;">
+        <span class="label">الوصف:</span>
+        <p class="description">{{ series.description|default:"لا يوجد وصف متاح." }}</p>
+    </div>
 </div>
+
+<style>
+    .series-details-container {
+        padding: 30px;
+        background-color: #0b0b0b;
+        color: #fff;
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .back-link {
+        color: #e50914;
+        text-decoration: none;
+        font-weight: bold;
+        display: inline-block;
+        margin-bottom: 15px;
+    }
+    .player-wrapper {
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto 25px auto;
+        background: #000;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+    }
+    .main-video, .main-frame {
+        width: 100%;
+        height: 480px;
+        border: none;
+        display: block;
+    }
+    .poster-fallback, .no-media {
+        text-align: center;
+        padding: 40px 20px;
+        color: #aaa;
+    }
+    .poster-fallback img {
+        max-height: 350px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+    .details-card {
+        max-width: 900px;
+        margin: 0 auto;
+        background: #141414;
+        padding: 25px;
+        border-radius: 12px;
+        border: 1px solid #222;
+        text-align: right;
+    }
+    .details-card h1 {
+        color: #fff;
+        margin-bottom: 10px;
+        font-size: 1.8rem;
+    }
+    .label {
+        color: #e50914;
+        font-weight: bold;
+        display: block;
+        margin-top: 10px;
+    }
+    .description {
+        color: #ccc;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin: 8px 0;
+    }
+</style>
 {% endblock %}

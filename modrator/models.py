@@ -27,18 +27,29 @@ class Series(models.Model):
 
 
 class VideoItem(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    video = models.FileField(upload_to='videos/', blank=True, null=True)
-    trailer_url = models.URLField(max_length=500, blank=True, null=True)
-    poster = models.ImageField(upload_to='posters/', blank=True, null=True)
-    
-    itemCategory = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
-    itemType = models.ForeignKey(VideoType, on_delete=models.SET_NULL, null=True, blank=True)
-    series = models.ForeignKey(Series, on_delete=models.SET_NULL, null=True, blank=True)
+    title = models.CharField(max_length=200, verbose_name="Title")
+    description = models.TextField(blank=True, null=True, verbose_name="Description")
+    poster = models.ImageField(upload_to='video_posters/', verbose_name="Video Poster")
+    video_file = models.FileField(upload_to='video_files/', verbose_name="Video File")
+    trailer_url = models.URLField(blank=True, null=True, verbose_name="Trailer URL (Optional)")
 
     def __str__(self):
         return self.title
+
+    
+    def get_embed_url(self):
+        if not self.trailer_url:
+            return None
+        url = self.trailer_url
+        if 'youtu.be/' in url:
+            video_id = url.split('youtu.be/')[1].split('?')[0]
+            return f"https://www.youtube.com/embed/{video_id}"
+        elif 'watch?v=' in url:
+            video_id = url.split('watch?v=')[1].split('&')[0]
+            return f"https://www.youtube.com/embed/{video_id}"
+        elif 'embed/' in url:
+            return url
+        return url
 
 
 # الموديل المطلوب لإصلاح ImportError
